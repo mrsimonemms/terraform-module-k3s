@@ -1,0 +1,18 @@
+{
+  "template": "https://github.com/mrsimonemms/new",
+  "commit": "89bd11f1726436cbc857f868c839c4bc3bb9ca7e",
+  "checkout": "main",
+  "context": {
+    "cookiecutter": {
+      "project_name": "terraform-module-k3s",
+      "description": "Build a highly-available k3s cluster with Terraform",
+      "author": "Simon Emms <simon@simonemms.com>",
+      "module_name": "terraform-module-k3s",
+      "_template": "https://github.com/mrsimonemms/new"
+    }
+  },
+  "directory": "terraform",
+  "skip": [
+    ".git"
+  ]
+}
