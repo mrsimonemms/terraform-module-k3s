@@ -1,0 +1,56 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+permissions: read-all
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # fetch-depth is required
+
+      - uses: wagoid/commitlint-github-action@v6
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # fetch-depth is required
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '>=1.20.0'
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+
+      - name: Install Trivy
+        run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+
+      - name: Install Terragrunt
+        uses: jaxxstorm/action-install-gh-release@v1.10.0
+        with:
+          repo: gruntwork-io/terragrunt
+          extension-matching: disable
+          rename-to: terragrunt
+          chmod: 0755
+
+      - name: Init Terragrunt
+        run: terragrunt run-all init
+
+      - uses: pre-commit/action@v3.0.1
