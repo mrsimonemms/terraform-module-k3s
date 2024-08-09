@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+output "kubeconfig" {
+  sensitive   = true
+  description = "Kubeconfig"
+  value       = module.k3s.kubeconfig
+}
+
 output "pools" {
   description = "Servers created"
   value = merge(

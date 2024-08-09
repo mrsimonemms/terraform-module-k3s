@@ -12,12 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform {
-  required_version = ">= 1.0.0"
-  required_providers {
-    ssh = {
-      source  = "loafoe/ssh"
-      version = ">= 2.7.0, < 3.0.0"
-    }
-  }
+output "kubeconfig" {
+  sensitive   = true
+  description = "Kubeconfig"
+  value       = local.k3s_kubeconfig
 }

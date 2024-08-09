@@ -67,10 +67,10 @@ Example infrastructure in Hetzner
 
 | Name | Description |
 |------|-------------|
+| <a name="output_kubeconfig"></a> [kubeconfig](#output\_kubeconfig) | Kubeconfig |
 | <a name="output_pools"></a> [pools](#output\_pools) | Servers created |
 | <a name="output_ssh_port"></a> [ssh\_port](#output\_ssh\_port) | SSH port for server |
 | <a name="output_ssh_private_key"></a> [ssh\_private\_key](#output\_ssh\_private\_key) | Private SSH key |
 | <a name="output_ssh_public_key"></a> [ssh\_public\_key](#output\_ssh\_public\_key) | Public SSH key |
 | <a name="output_ssh_user"></a> [ssh\_user](#output\_ssh\_user) | SSH user for server |
-| <a name="output_sss"></a> [sss](#output\_sss) | n/a |
 <!-- END_TF_DOCS -->
