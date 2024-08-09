@@ -30,8 +30,6 @@ resource "hcloud_ssh_key" "server" {
 # Managers #
 ############
 resource "hcloud_placement_group" "managers" {
-  count = var.k3s_manager_pool.count > 1 ? 1 : 0
-
   name = "${local.name_prefix}-manager"
   type = "spread"
 
@@ -49,8 +47,7 @@ resource "hcloud_server" "manager" {
     hcloud_ssh_key.server.id
   ]
 
-  # No placement group if single node manager
-  placement_group_id = try(hcloud_placement_group.managers[0].id, null)
+  placement_group_id = hcloud_placement_group.managers.id
 
   user_data = local.user_data
 
@@ -95,9 +92,6 @@ resource "ssh_resource" "manager_ready" {
   ]
 
   depends_on = [hcloud_server.manager]
-  triggers = {
-    always = timestamp()
-  }
 }
 
 ##################
@@ -165,7 +159,4 @@ resource "ssh_resource" "workers_ready" {
   ]
 
   depends_on = [hcloud_server.workers]
-  triggers = {
-    always = timestamp()
-  }
 }

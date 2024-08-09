@@ -30,6 +30,12 @@ variable "firewall_allow_ssh_access" {
   ]
 }
 
+variable "hcloud_token" {
+  type        = string
+  sensitive   = true
+  description = "Hetzner cloud API token"
+}
+
 variable "k3s_manager_load_balancer_algorithm" {
   type        = string
   description = "Algorithm to use for the k3s manager load balancer"
