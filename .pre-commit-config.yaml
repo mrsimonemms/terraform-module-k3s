@@ -44,6 +44,8 @@ repos:
           - markdown
           - .
           - --hide-empty
+          - --recursive
+          - --recursive-path=examples
           - --recursive-include-main=true
           - --output-file=README.md
   - repo: https://github.com/antonbabenko/pre-commit-terraform

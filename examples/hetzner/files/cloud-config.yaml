@@ -1,0 +1,32 @@
+#cloud-config
+
+package_reboot_if_required: true
+package_update: true
+package_upgrade: true
+packages:
+  - curl
+  - yq
+runcmd:
+  - [service, sshd, restart]
+  - [rm, -f, /root/.ssh/authorized_keys]
+  - chown ${user}:${user} "/home/${user}"
+timezone: UTC
+users:
+  - default
+  - name: "${user}"
+    gecos: "${user}"
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: true
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - "${chomp(publicKey)}"
+write_files:
+  - path: /etc/ssh/sshd_config.d/ssh.conf
+    content: |
+      PasswordAuthentication no
+      PermitRootLogin no
+      Port ${sshPort}
+  - path: /etc/environment
+    content: |
+      KUBECONFIG="/etc/rancher/k3s/k3s.yaml"
+    append: true
