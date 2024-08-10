@@ -42,9 +42,21 @@ variable "context" {
   default     = "default"
 }
 
+variable "custom_global_config" {
+  type        = any
+  description = "Override configuration for all nodes. This is merged with the generated configuration."
+  default     = {}
+}
+
 variable "custom_manager_config" {
   type        = any
   description = "Override configuration for the managers. This is merged with the generated configuration."
+  default     = {}
+}
+
+variable "custom_worker_config" {
+  type        = any
+  description = "Override configuration for the workers. This is merged with the generated configuration."
   default     = {}
 }
 
@@ -75,10 +87,22 @@ variable "disable_cloud_controller" {
   default     = true
 }
 
+variable "drain_timeout" {
+  type        = string
+  description = "Node drain timeout"
+  default     = "30s"
+}
+
 variable "flannel_backend" {
   type        = string
   description = "Flannel backend"
   default     = "wireguard-native"
+}
+
+variable "install_workers" {
+  type        = bool
+  description = "Install the workers directly"
+  default     = true
 }
 
 variable "k3s_channel" {
@@ -199,6 +223,44 @@ variable "tls_san" {
   type        = list(string)
   description = "Additional TLS SANs to add to the generated certificate"
   default     = []
+}
+
+variable "workers" {
+  type = map(list(object({
+    node-external-ip = string           # External IP for the node
+    node-ip          = string           # Private IP for the node
+    name             = optional(string) # Name of the server node - will be "<pool>-<count>" if left blank
+
+    labels = optional(list(object({
+      key   = string
+      value = string
+    })), [])
+
+    taints = optional(list(object({
+      key    = string
+      value  = string
+      effect = string
+    })), [])
+
+    # Node's SSH connection details
+    connection = object({
+      agent       = optional(bool)
+      host        = string
+      password    = optional(string)
+      private_key = optional(string)
+      port        = optional(number)
+      timeout     = optional(string, "5m")
+      user        = optional(string)
+
+      bastion_host        = optional(string)
+      bastion_password    = optional(string)
+      bastion_private_key = optional(string)
+      bastion_port        = optional(number)
+      bastion_user        = optional(string)
+    })
+  })))
+  description = "Worker pool configuration"
+  default     = {}
 }
 
 variable "write_kubeconfig_mode" {

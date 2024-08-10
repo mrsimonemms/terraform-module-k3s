@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+output "cluster_cidr" {
+  description = "IPv4/IPv6 network CIDRs to use for pod IPs"
+  value       = var.cluster_cidr
+}
+
 output "kube_api_server" {
   description = "Kubernetes API server address"
   value       = local.kube_apiserver_address

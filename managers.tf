@@ -34,6 +34,7 @@ resource "ssh_resource" "initial_manager" {
         ) : "${t.key}=${t.value}:${t.effect}"]
       },
       var.custom_manager_config,
+      var.custom_global_config,
     ))
     destination = "/tmp/k3sconfig.yaml"
   }
@@ -122,11 +123,6 @@ resource "ssh_sensitive_resource" "kubeconfig" {
   ]
 }
 
-output "sss" {
-  sensitive = true
-  value     = tolist(local.manager_pool)
-}
-
 resource "ssh_resource" "additional_managers" {
   for_each = { for manager in local.additional_managers : manager.name => manager }
 
@@ -153,6 +149,7 @@ resource "ssh_resource" "additional_managers" {
         token  = local.k3s_join_token
       },
       var.custom_manager_config,
+      var.custom_global_config,
     ))
     destination = "/tmp/k3sconfig.yaml"
   }

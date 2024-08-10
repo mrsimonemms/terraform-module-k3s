@@ -30,6 +30,22 @@ module "k3s" {
       }
     }
   ]
+
+  workers = {
+    for i, p in local.k3s_worker_pools : p.pool => {
+      name             = hcloud_server.workers[i].name # For Hetzner, this must be the same as the Hetzner node name
+      node-external-ip = hcloud_server.workers[i].ipv4_address
+      node-ip          = tolist(hcloud_server.workers[i].network)[0].ip
+
+      connection = {
+        host        = hcloud_server.workers[i].ipv4_address
+        port        = local.ssh_port
+        private_key = local.ssh_private_key
+        user        = local.ssh_user
+      }
+    }...
+  }
+
   disable_addons = [
     "local-storage",
     "metrics-server",

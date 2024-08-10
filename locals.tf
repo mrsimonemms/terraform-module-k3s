@@ -31,11 +31,20 @@ locals {
       "sudo systemctl start k3s"
     ]
   )
+  k3s_install_worker_commands = [
+    # Copy the config
+    "sudo mkdir -p /etc/rancher/k3s/config.yaml.d",
+    "sudo mv /tmp/k3sconfig.yaml /etc/rancher/k3s/config.yaml",
+    "curl -sfL ${var.k3s_download_url} | INSTALL_K3S_EXEC=\"agent\" sh -"
+  ]
   k3s_join_token               = chomp(ssh_sensitive_resource.join_token.result)
   k3s_kubeconfig               = chomp(ssh_sensitive_resource.kubeconfig.result)
   kube_apiserver_address       = var.manager_load_balancer_address != null ? var.manager_load_balancer_address : local.initial_manager.node-external-ip
   kube_apiserver_https_address = "https://${local.kube_apiserver_address}:${var.kubernetes_https_listen_port}"
   kubectl_cmd                  = var.sudo ? "sudo kubectl" : "kubectl"
+  kube_labels = {
+    pool = "node.kubernetes.io/pool"
+  }
   manager_base_config = merge(
     {
       cluster-cidr             = var.cluster_cidr
@@ -64,4 +73,29 @@ locals {
       name = node.name != null ? node.name : "manager-${i}"
     }
   )]
+  worker_base_config = {
+    kubelet-arg = var.kubelet_args
+    server      = local.kube_apiserver_https_address
+    token       = local.k3s_join_token
+  }
+  # Add in the default values for the worker pools
+  worker_pools = {
+    for poolName, nodes in var.workers : poolName => [
+      for i, node in nodes : merge(
+        node,
+        {
+          name = node.name != null ? node.name : "${poolName}-${i}"
+          labels = concat(
+            try(node.labels, []),
+            [
+              {
+                key   = local.kube_labels.pool
+                value = poolName
+              }
+            ]
+          )
+        }
+      )
+    ]
+  }
 }
