@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+output "k3s_join_token" {
+  sensitive   = true
+  description = "Join token for the k3s cluster"
+  value       = module.k3s.k3s_join_token
+}
+
 output "kubeconfig" {
   sensitive   = true
   description = "Kubeconfig"

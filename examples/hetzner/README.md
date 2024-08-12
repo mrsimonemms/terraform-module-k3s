@@ -69,6 +69,7 @@ Example infrastructure in Hetzner
 
 | Name | Description |
 |------|-------------|
+| <a name="output_k3s_join_token"></a> [k3s\_join\_token](#output\_k3s\_join\_token) | Join token for the k3s cluster |
 | <a name="output_kubeconfig"></a> [kubeconfig](#output\_kubeconfig) | Kubeconfig |
 | <a name="output_pools"></a> [pools](#output\_pools) | Servers created |
 | <a name="output_ssh_port"></a> [ssh\_port](#output\_ssh\_port) | SSH port for server |

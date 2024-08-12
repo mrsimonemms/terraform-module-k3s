@@ -17,6 +17,12 @@ output "cluster_cidr" {
   value       = var.cluster_cidr
 }
 
+output "k3s_join_token" {
+  sensitive   = true
+  description = "Join token for the k3s cluster"
+  value       = local.k3s_join_token
+}
+
 output "kube_api_server" {
   description = "Kubernetes API server address"
   value       = local.kube_apiserver_address
