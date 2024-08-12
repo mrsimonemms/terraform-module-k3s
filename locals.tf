@@ -57,7 +57,7 @@ locals {
       kubelet-arg              = var.kubelet_args
       service-cidr             = var.service_cidr
       tls-san = distinct(concat(
-        var.manager_load_balancer_address != null ? [local.kube_apiserver_address] : [for i in var.managers : i.advertise-address],
+        var.manager_load_balancer_address != null ? [local.kube_apiserver_address] : flatten([for i in var.managers : [i.advertise-address, i.node-external-ip]]),
         var.tls_san
       ))
       write-kubeconfig-mode = var.write_kubeconfig_mode
