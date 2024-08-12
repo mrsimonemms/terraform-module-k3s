@@ -80,6 +80,7 @@ Build a highly-available k3s cluster with Terraform
 | Name | Description |
 |------|-------------|
 | <a name="output_cluster_cidr"></a> [cluster\_cidr](#output\_cluster\_cidr) | IPv4/IPv6 network CIDRs to use for pod IPs |
+| <a name="output_k3s_join_token"></a> [k3s\_join\_token](#output\_k3s\_join\_token) | Join token for the k3s cluster |
 | <a name="output_kube_api_server"></a> [kube\_api\_server](#output\_kube\_api\_server) | Kubernetes API server address |
 | <a name="output_kubeconfig"></a> [kubeconfig](#output\_kubeconfig) | Kubeconfig |
 <!-- END_TF_DOCS -->
