@@ -190,7 +190,7 @@ resource "ssh_resource" "drain_managers" {
 
   commands = [
     "${local.kubectl_cmd} cordon ${each.key}", # Not really necessary, but belt-and-braces
-    "${local.kubectl_cmd} drain ${each.key} --delete-local-data --force --ignore-daemonsets --timeout=${var.drain_timeout}",
+    "${local.kubectl_cmd} drain ${each.key} --delete-emptydir-data --force --ignore-daemonsets --timeout=${var.drain_timeout}",
     "${local.kubectl_cmd} delete node ${each.key} --force --timeout=${var.drain_timeout} || true"
   ]
 
